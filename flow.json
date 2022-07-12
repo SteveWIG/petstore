@@ -1,0 +1,27 @@
+{
+	"emulators": {
+		"default": {
+			"port": 3569,
+			"serviceAccount": "emulator-account"
+		}
+	},
+	"contracts": {
+		"PetStore": "./src/flow/contract/PetStore.cdc"
+	},
+	"networks": {
+		"emulator": "127.0.0.1:3569",
+		"mainnet": "access.mainnet.nodes.onflow.org:9000",
+		"testnet": "access.devnet.nodes.onflow.org:9000"
+	},
+	"accounts": {
+		"emulator-account": {
+			"address": "f8d6e0586b0a20c7",
+			"key": "26792fe65c8f69fb0c45543ebeeaae0ec6e81641718f489947eb5f3daedee568"
+		}
+	},
+	"deployments": {
+		"emulator": {
+			"emulator-account": ["PetStore"]
+		}
+	}
+}

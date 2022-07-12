@@ -1,6 +1,7 @@
 {
   "name": "petstore",
   "version": "0.1.0",
+  "description": "https://dev.to/pancy/building-a-flow-nft-pet-store-part-1-4bn9",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
