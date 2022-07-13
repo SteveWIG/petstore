@@ -1,3 +1,7 @@
+@import "./skeleton/skeleton.css";
+@import "./skeleton/normalize.css";
+
+
 .App {
   text-align: center;
 }

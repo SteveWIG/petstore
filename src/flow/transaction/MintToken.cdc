@@ -4,7 +4,7 @@
 // This is a fixed address for used with the emulator only.
 import PetStore from 0xf8d6e0586b0a20c7
 
-transaction(name: String, breed: String) {
+transaction(metadata: {String: String}) {
 
     // Declare an "unauthorized" reference to `NFTReceiver` interface.
     let receiverRef: &{PetStore.NFTReceiver}
@@ -12,7 +12,7 @@ transaction(name: String, breed: String) {
     // Declare an "authorized" reference to the `NFTMinter` interface.
     let minterRef: &PetStore.NFTMinter
 
-    let myMetaData:{String:String}
+    //let myMetaData:{String:String}
 
     // `prepare` block always take one or more `AuthAccount` parameter(s) to indicate
     // who are signing the transaction.
@@ -23,10 +23,10 @@ transaction(name: String, breed: String) {
     // to these resources.
     prepare(account: AuthAccount) {
 
-        self.myMetaData={}
+        //self.myMetaData={}
 
-        self.myMetaData.insert(key: "name",name)
-        self.myMetaData.insert(key: "breed", breed)
+        //self.myMetaData.insert(key: "name",name)
+        //self.myMetaData.insert(key: "breed", breed)
 
         // Note that we have to call `getCapability(_ domain: Domain)` on the account
         // object before we can `borrow()`.
@@ -45,7 +45,7 @@ transaction(name: String, breed: String) {
     execute {
         // Mint the token by calling `mint(metadata: {String: String})` on `@NFTMinter` resource, which returns an `@NFT` resource, and move it to a variable `newToken`.
         
-        let newToken <- self.minterRef.mint(self.myMetaData)
+        let newToken <- self.minterRef.mint(metadata)
 
         // Call `deposit(token: @NFT)` on the `@NFTReceiver` resource to deposit the token.
         // Note that this is where the metadata can be changed before transferring.

@@ -4,9 +4,12 @@
   "description": "https://dev.to/pancy/building-a-flow-nft-pet-store-part-1-4bn9",
   "private": true,
   "dependencies": {
+    "@onflow/fcl": "^1.1.0",
+    "@onflow/types": "^1.0.2",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "nft.storage": "^6.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
