@@ -39,6 +39,18 @@ pub contract PetStore {
 
         // Can update the metadata of an NFT.
         pub fun updateTokenMetadata(id: UInt64, metadata: {String: String})
+
+    }
+
+    pub resource interface NFTFactoryInterface{
+        // Can create an NFT collection
+        pub fun createNFTCollection(): @NFTCollection
+    }
+
+    pub resource NFTFactory: NFTFactoryInterface {
+        pub fun createNFTCollection(): @NFTCollection {
+            return <- create NFTCollection()
+        }
     }
 
     pub resource NFTCollection: NFTReceiver {
@@ -86,12 +98,17 @@ pub contract PetStore {
                 //self.ownedNFTs[id]?.metadata?.insert(key: key,  metadata[key]!)
             }
         }
+
     }
 
     // Public factory method to create a collection
     // so it is callable from the contract scope.
     pub fun createNFTCollection(): @NFTCollection {
         return <- create NFTCollection()
+    }
+
+    pub fun writeToOwnerLog(id: UInt64, address: Address){
+        self.owners[id] = address
     }
 
     pub resource NFTMinter {
