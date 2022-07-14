@@ -41,6 +41,8 @@ async function uploadToStorage(pet) {
   
 async function mintPet(metadata) {
     // Convert the metadata into a {String: String} type. See below.
+    console.log('mintPet');
+
     const dict = toCadenceDict(metadata);
 
     // Build a list of arguments
@@ -54,8 +56,21 @@ async function mintPet(metadata) {
     // Fetch the Cadence raw code.
     const code = await (await fetch(cdc)).text();
 
+    console.log('code:'+code);
+
+    console.log('payload:'+payload);
+
     // Send the transaction!
     // Note the `userAuthz` function we have not implemented.
+    /*const encoded = await fcl.send([
+        fcl.transaction(code),
+        fcl.payer(fcl.authz),
+        fcl.proposer(fcl.authz),
+        fcl.authorizations([fcl.authz]),
+        fcl.limit(999),
+        payload,
+    ]);*/
+
     const encoded = await fcl.send([
         fcl.transaction(code),
         fcl.payer(fcl.authz),
@@ -64,6 +79,8 @@ async function mintPet(metadata) {
         fcl.limit(999),
         payload,
     ]);
+    
+    console.log('Waiting for the transaction id');
 
     // Call `fcl.decode` to get the transaction ID.
     let txId = await fcl.decode(encoded);

@@ -21,12 +21,23 @@
         "test-account": {
             "address": "f1e5ab6086467798",
             "key": "b02373c1c5d0d5cb5affa97bb938428aa718dfe69347f4a668bb8e66d21de2fb"
-        }
-
+        },
+		"root": {
+			"address": "f8d6e0586b0a20c7",
+			"key": "26792fe65c8f69fb0c45543ebeeaae0ec6e81641718f489947eb5f3daedee568",
+			"sigAlgorithm": "ECDSA_P256",
+			"hashAlgorithm": "SHA3_256"
+		}
 	},
 	"deployments": {
 		"emulator": {
 			"emulator-account": ["PetStore"]
 		}
+	},
+	"devWallet": {
+		"accessNode": {
+		  "endpoint": "http://localhost:8080"
+		},
+		"port": 8701
 	}
 }
