@@ -2,7 +2,7 @@
 import { NFTStorage, File } from 'nft.storage';
 import * as fcl from '@onflow/fcl';
 import * as t from '@onflow/types';
-import cdc from './MintToken.cdc';
+//import cdc from './MintToken.cdc';
 import photomint from './MintPhotoShopNFT.cdc';
 
 const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDdiMjgxZGIzRmQ0ZjU3MTE4N2JlQjM4NGE5YWE0NTg5NTE3ZTJmNDQiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1NzcxMDAwMDc4MCwibmFtZSI6IlBldHNob3AifQ.dE6OH_nEQmrZqJ5L3JTuJOPlkyUzuYJpGqzqPOLPQPI";
@@ -18,7 +18,7 @@ async function mintToken(pet) {
     // We want to include the IPFS URL to the blockchain, so we can
     // "unpack" the token data when we query it later. So we create
     // a new object with all of the pet's attributes plus `url`.
-    const txId = await mintPet({ ...pet, url });
+    const txId = await mintPhotoNFT({ ...pet, url });
     return txId;
 }
   
@@ -40,19 +40,19 @@ async function uploadToStorage(pet) {
     return metadata;
 }
   
-async function mintPet(metadata) {
+async function mintPhotoNFT(metadata) {
     // Convert the metadata into a {String: String} type. See below.
     console.log('mintPet - adding photo shop NFT');
 
-    //const dict = toCadenceDict(metadata);
+    const dict = toCadenceDict(metadata);
 
     // Build a list of arguments
-    //const payload = fcl.args([
-      //  fcl.arg(
-        //dict,
-        //t.Dictionary({ key: t.String, value: t.String }),
-        //)
-    //]);
+    const payload = fcl.args([
+        fcl.arg(
+          dict,
+         t.Dictionary({ key: t.String, value: t.String }),
+        )
+    ]);
 
     // Fetch the Cadence raw code.
     // const code = await (await fetch(cdc)).text();
@@ -79,6 +79,7 @@ async function mintPet(metadata) {
         fcl.proposer(fcl.authz),
         fcl.authorizations([fcl.authz]),
         fcl.limit(999),        
+        payload
     ]);
     
     console.log('Waiting for the transaction id');

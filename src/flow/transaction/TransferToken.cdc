@@ -1,6 +1,6 @@
 // TransferToken.cdc
 
-import PetStore from 0xf8d6e0586b0a20c7
+import PetStore from 0xAdminAccount
 
 // This transaction transfers a token from one user's
 // collection to another user's collection.
