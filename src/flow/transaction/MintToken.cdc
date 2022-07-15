@@ -1,16 +1,14 @@
 // MintToken.cdc
 
 // Import the `PetStore` contract instance from the master account address.
-// This is a fixed address for used with the emulator only.
-import PetStore from 0xf8d6e0586b0a20c7
+// This is a fixed address for used with the testNet only.
+import PetStore from 0x02b34629baf16c99
 
 transaction(metadata: {String: String}) {
 
-    // Declare an "unauthorized" reference to `NFTReceiver` interface.
-    let receiverRef: &{PetStore.NFTReceiver}
+    let receiverRef: &PetStore.NFTNoInterfaceCollection?
 
-    // Declare an "authorized" reference to the `NFTMinter` interface.
-    let minterRef: &PetStore.NFTMinter
+    let minterRef: &PetStore.NFTMinter?
 
     //let myMetaData:{String:String}
 
@@ -22,23 +20,19 @@ transaction(metadata: {String: String}) {
     // resources, and will fail if the user executing this transaction does not have access
     // to these resources.
     prepare(account: AuthAccount) {
+        
+        self.minterRef = account.borrow<&PetStore.NFTMinter>(from: /storage/NFTMinter)
 
-        //self.myMetaData={}
-
-        //self.myMetaData.insert(key: "name",name)
-        //self.myMetaData.insert(key: "breed", breed)
-
-        // Note that we have to call `getCapability(_ domain: Domain)` on the account
-        // object before we can `borrow()`.
-        self.receiverRef = account.getCapability<&{PetStore.NFTReceiver}>(/public/NFTReceiver)
-            .borrow()
-            ?? panic("Could not borrow receiver reference")
-
+        self.receiverRef = account.borrow<&PetStore.NFTNoInterfaceCollection>(from: /storage/NFTNoInterfaceCollection)
+            //?? panic("Could not borrow receiver reference")
+        
         // With an authorized reference, we can just `borrow()` it.
         // Note that `NFTMinter` is borrowed from `/storage` domain namespace, which
         // means it is only accessible to this account.
-        self.minterRef = account.borrow<&PetStore.NFTMinter>(from: /storage/NFTMinter)
-            ?? panic("Could not borrow minter reference")
+        
+        //self.minterRef = account.borrow<&PetStore.NFTMinter>(from: /storage/NFTMinter)
+        //    ?? panic("Could not borrow minter reference")
+
     }
 
     // `execute` block executes after the `prepare` block is signed and validated.
@@ -46,9 +40,11 @@ transaction(metadata: {String: String}) {
         // Mint the token by calling `mint(metadata: {String: String})` on `@NFTMinter` resource, which returns an `@NFT` resource, and move it to a variable `newToken`.
         
         let newToken <- self.minterRef.mint(metadata)
-
+        
         // Call `deposit(token: @NFT)` on the `@NFTReceiver` resource to deposit the token.
         // Note that this is where the metadata can be changed before transferring.
-        self.receiverRef.deposit(token: <-newToken)
+        self.receiverRef.deposit(<- newToken)
+        //PetStore.NFTCollection.deposit(token: <-newToken)
+
     }
 }

@@ -53,7 +53,7 @@ pub contract PetStore {
         }
     }
 
-    pub resource NFTCollection: NFTReceiver {
+    pub resource NFTCollection:NFTReceiver  {
 
         // Keeps track of NFTs this collection.
         access(account) var ownedNFTs: @{UInt64: NFT}
@@ -101,6 +101,28 @@ pub contract PetStore {
 
     }
 
+    pub resource NFTNoInterfaceCollection{
+
+        // Keeps track of NFTs this collection.
+        pub var ownedNFTs: @{UInt64: NFT}
+
+        // Destructor
+        destroy() {
+            destroy self.ownedNFTs
+        }
+
+        // Constructor
+        init() {
+            self.ownedNFTs <- {}
+        }
+
+        // Deposits a token to this NFTCollection instance.
+        pub fun deposit(_ token: @NFT) {
+            self.ownedNFTs[token.id] <-! token
+        }
+
+    }
+
     // Public factory method to create a collection
     // so it is callable from the contract scope.
     pub fun createNFTCollection(): @NFTCollection {
@@ -115,7 +137,7 @@ pub contract PetStore {
 
         // Declare a global variable to count ID.
         pub var idCount: UInt64
-
+        
         init() {
             // Instantialize the ID counter.
             self.idCount = 1
@@ -156,11 +178,17 @@ pub contract PetStore {
         // which is only accessible by the contract owner's account.
         self.account.save(<-create NFTCollection(), to: /storage/NFTCollection)
 
+        self.account.save(<-create NFTNoInterfaceCollection(), to: /storage/NFTNoInterfaceCollection)
+
         // "Link" only the `@NFTReceiver` interface from the `@NFTCollection` stored at `/storage/NFTCollection` domain to the `/public/NFTReceiver` domain, which is accessible to any user.
         self.account.link<&{NFTReceiver}>(/public/NFTReceiver, target: /storage/NFTCollection)
+
+        self.account.link<&NFTCollection>(/public/NFTCollection, target: /storage/NFTCollection)
 
         // Create a new `@NFTMinter` instance and save it in `/storage/NFTMinter` domain, accesible
         // only by the contract owner's account.
         self.account.save(<-create NFTMinter(), to: /storage/NFTMinter)
+
+        self.account.link<&NFTMinter>(/public/NFTMinter, target: /storage/NFTMinter)
     }
 }

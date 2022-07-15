@@ -3,6 +3,7 @@ import { NFTStorage, File } from 'nft.storage';
 import * as fcl from '@onflow/fcl';
 import * as t from '@onflow/types';
 import cdc from './MintToken.cdc';
+import photomint from './MintPhotoShopNFT.cdc';
 
 const API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDdiMjgxZGIzRmQ0ZjU3MTE4N2JlQjM4NGE5YWE0NTg5NTE3ZTJmNDQiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1NzcxMDAwMDc4MCwibmFtZSI6IlBldHNob3AifQ.dE6OH_nEQmrZqJ5L3JTuJOPlkyUzuYJpGqzqPOLPQPI";
 
@@ -41,24 +42,25 @@ async function uploadToStorage(pet) {
   
 async function mintPet(metadata) {
     // Convert the metadata into a {String: String} type. See below.
-    console.log('mintPet');
+    console.log('mintPet - adding photo shop NFT');
 
-    const dict = toCadenceDict(metadata);
+    //const dict = toCadenceDict(metadata);
 
     // Build a list of arguments
-    const payload = fcl.args([
-        fcl.arg(
-        dict,
-        t.Dictionary({ key: t.String, value: t.String }),
-        )
-    ]);
+    //const payload = fcl.args([
+      //  fcl.arg(
+        //dict,
+        //t.Dictionary({ key: t.String, value: t.String }),
+        //)
+    //]);
 
     // Fetch the Cadence raw code.
-    const code = await (await fetch(cdc)).text();
+    // const code = await (await fetch(cdc)).text();
+    const code = await (await fetch(photomint)).text();
 
     console.log('code:'+code);
 
-    console.log('payload:'+payload);
+    //console.log('payload:'+payload);
 
     // Send the transaction!
     // Note the `userAuthz` function we have not implemented.
@@ -76,17 +78,19 @@ async function mintPet(metadata) {
         fcl.payer(fcl.authz),
         fcl.proposer(fcl.authz),
         fcl.authorizations([fcl.authz]),
-        fcl.limit(999),
-        payload,
+        fcl.limit(999),        
     ]);
     
     console.log('Waiting for the transaction id');
 
     // Call `fcl.decode` to get the transaction ID.
     let txId = await fcl.decode(encoded);
+    console.log(txId);
 
     // This waits for the transaction to be sealed, which is a recommended way.
     await fcl.tx(txId).onceSealed();
+
+    console.log('SEALED');
 
     // Return the transaction ID
     return txId;
