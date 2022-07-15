@@ -11,6 +11,10 @@ pub contract PhotoStore{
         }
     }
 
+    pub fun createNFT(): @NFT {
+        return <- create NFT()
+    }
+
     init(){
         self.totalSupply = 0
     }
