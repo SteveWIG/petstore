@@ -1,4 +1,3 @@
-// MintToken.tx.js
 import { NFTStorage, File } from 'nft.storage';
 import * as fcl from '@onflow/fcl';
 import * as t from '@onflow/types';
@@ -42,7 +41,7 @@ async function uploadToStorage(pet) {
   
 async function mintPhotoNFT(metadata) {
     // Convert the metadata into a {String: String} type. See below.
-    console.log('mintPet - adding photo shop NFT');
+    console.log('MintPhotoShopNFT - adding NFT');
 
     const dict = toCadenceDict(metadata);
 
@@ -73,9 +72,11 @@ async function mintPhotoNFT(metadata) {
         payload,
     ]);*/
 
+    console.log(payload)
+
     const encoded = await fcl.send([
         fcl.transaction(code),
-        fcl.args([payload],t.Dictionary),
+        payload,
         fcl.payer(fcl.authz),
         fcl.proposer(fcl.authz),
         fcl.authorizations([fcl.authz]),

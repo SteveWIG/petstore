@@ -1,4 +1,9 @@
-pub contract PhotoStore{
+pub contract PhotoStore03{
+
+    pub let CollectionStoragePath: StoragePath
+    pub let CollectionPublicPath: PublicPath
+    pub let MinterStoragePath: StoragePath
+
 
     pub var totalSupply: UInt64
 
@@ -9,9 +14,9 @@ pub contract PhotoStore{
         pub var metadata: {String: String}
 
         init(metadata: {String: String}){
-            self.id = PhotoStore.totalSupply
+            self.id = PhotoStore03.totalSupply
             self.metadata = metadata
-            PhotoStore.totalSupply = PhotoStore.totalSupply + (1 as UInt64)
+            PhotoStore03.totalSupply = PhotoStore03.totalSupply + (1 as UInt64)
         }
     }
 
@@ -37,7 +42,7 @@ pub contract PhotoStore{
 
     }
 
-    pub resource NFTCollection:NFTReceiver  {
+    pub resource NFTPhotoCollection:NFTReceiver  {
 
         // Keeps track of NFTs this collection.
         access(account) var ownedNFTs: @{UInt64: NFT}
@@ -86,12 +91,18 @@ pub contract PhotoStore{
     }
 
     pub fun createNFT(metadata: {String: String}): @NFT {
-        return <- create NFT(metadata: {String: String})
+        return <- create NFT(metadata:metadata)
     }
 
     init(){
         self.totalSupply = 0
-        self.account.save(<-create NFTCollection(), to: /storage/NFTCollection)
+       
+        self.CollectionStoragePath = /storage/nftPhotoCollection3
+        self.CollectionPublicPath = /public/nftPhotoCollection3
+        self.MinterStoragePath = /storage/nftPhotoMinter3
+
+        self.account.save(<-create NFTPhotoCollection(), to: self.CollectionStoragePath)
+        self.account.link<&{NFTReceiver}>(self.CollectionPublicPath, target: self.CollectionStoragePath)
     }
 
 

@@ -3,7 +3,7 @@
 // Import the `FileSelector` module, which does not exist yet. 
 import FileSelector from './FileSelector';
 import { useState } from 'react';
-import mintPhotoNFT from '../flow/transaction/MintToken.tx.js';
+import mintPhotoNFT from '../flow/transaction/MintPhotoShopNFT.js';
 
 // Collect the information of a pet and manage as a state
 // and mint the NFT based on the information.
@@ -21,7 +21,7 @@ const MyForm = () => {
   // Update the state of the pet's breed.
   const setDescription = (event) => {
     const description = event.target.value;
-    setDescription({...photo, description});
+    setPhoto({...photo, description});
   }
 
   const handleSubmit = async (event) => {

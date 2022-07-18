@@ -5,6 +5,7 @@ import MyForm from './components/Form.js';
 import "./flow/config";
 import {useEffect, useState} from 'react'
 import * as fcl from "@onflow/fcl";
+import QueryForm from './components/QueryForm';
 
 function App() {
   const [user, setUser] = useState();
@@ -19,6 +20,7 @@ function App() {
       <button onClick={()=>fcl.authenticate()}>Connect Wallet</button>
       <button onClick={()=>fcl.unauthenticate()}>Disconnect Wallet</button>
       {MyForm()}
+      {QueryForm()}
     </div>
   );
 }
