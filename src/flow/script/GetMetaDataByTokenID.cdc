@@ -1,6 +1,6 @@
 import PhotoStore03 from 0xAdminAccount
 
-pub fun main(String: id):{String : String}{
+pub fun main(id: UInt64):{String: String}{
 
     let adminAccount = getAccount(0xAdminAccount)
 
@@ -9,6 +9,6 @@ pub fun main(String: id):{String : String}{
     let receiverRef = capability.borrow()
         ?? panic("What is wrong with this?")
 
-    return receiverRef.getTokenMetadata(id:id, t.String)
+    return receiverRef.getTokenMetadata(id: id)
 
 }

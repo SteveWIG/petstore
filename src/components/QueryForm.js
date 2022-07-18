@@ -22,7 +22,6 @@ const QueryForm = () => {
         event.preventDefault();
 
         //try{
-            var selectedId = event.target.id;
             let metadata = await getMetaDataByTokenID(selectedId);
             let dataURL = NFTStorage.toGatewayURL(metadata.url);
             // Fetch the URL to get a JSON response, which contains
