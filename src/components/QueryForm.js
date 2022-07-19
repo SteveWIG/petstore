@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import getAllMyPhotoNFTIds from '../flow/script/GetAllMyPhotoNFTIds.js';
 import getMetaDataByTokenID from '../flow/script/GetMetaDataByTokenID.js';
-import {NFTStorage, toGatewayURL} from "nft.storage"
+import {toGatewayURL} from "nft.storage"
 
 const QueryForm = () => {
 
@@ -23,7 +23,7 @@ const QueryForm = () => {
 
         //try{
             let metadata = await getMetaDataByTokenID(selectedId);
-            let dataURL = NFTStorage.toGatewayURL(metadata.url);
+            let dataURL = toGatewayURL(metadata.url);
             // Fetch the URL to get a JSON response, which contains
             // an `image` attribute.
             // create a new metadata object and set the metadata to the value.
@@ -62,9 +62,7 @@ const QueryForm = () => {
                 </form>
                 {selectedId}
                 {
-                    // We only display the table if there's metadata.
-                    //metadata ? <MetadataTable metadata={metadata} /> : null
-                    <div>{metadata}</div>
+                    metadata ? <MetadataTable metadata={metadata} /> : null
                 }
         </div>
 
@@ -73,42 +71,24 @@ const QueryForm = () => {
 
 }
 
-/*const MetadataTable = ({ metadata }) => (
-    <table className="u-full-width">
-      <thead>
+const MetadataTable = ({ metadata }) => (
+  <div>
+    <table >
+      <tbody>
         <tr>
           {
             Object.keys(metadata).map((field,i) => (
               // Skip the `url` attribute in metadata for the table headings.
-              field === 'url' ? null : <th key={i}>{field}</th>
+              (field === 'url'||field === 'image') ? null : <tr><td key={i} style={{width:"50%"}} >{field}</td><td>{metadata[field]}</td></tr>
             ))
-          }
+          }          
         </tr>
-      </thead>
-      <tbody>
-        <tr>
-          {
-            Object.keys(metadata).map((field, i) => {
-              switch (field) {
-                // Skip displaying the url.
-                case 'url':
-                  return null;
-                // Display the image as <img> tag.
-                case 'image':
-                  return (
-                    <td key={i}>
-                      <img alt="Photo" src={metadata[field]} width="60px" />
-                    </td>
-                  );
-                // Default is to display data as text.
-                default:
-                  return <td key={i}>{metadata[field]}</td>;
-              }
-            })
-          }
-        </tr>
-      </tbody>
+      </tbody>      
     </table>
-  );*/
+    <div>
+      <img alt={metadata.description} src={metadata.image} width="700px" />
+    </div>
+  </div>    
+);
 
 export default QueryForm;
