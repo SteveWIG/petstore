@@ -20,10 +20,12 @@ function App() {
       <button onClick={()=>fcl.authenticate()}>Connect Wallet</button>
       <button onClick={()=>fcl.unauthenticate()}>Disconnect Wallet</button>
       <table>
-        <tr>
-          <td class='Vertical-align'>{MyForm()}</td>
-          <td class='Vertical-align'>{QueryForm()}</td>
-        </tr>
+        <tbody>
+          <tr>
+            <td className='Vertical-align'>{MyForm()}</td>
+            <td className='Vertical-align'>{QueryForm()}</td>
+          </tr>
+        </tbody>
       </table>
     </div>
   );
