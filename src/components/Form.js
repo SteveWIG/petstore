@@ -9,17 +9,20 @@ import mintPhotoNFT from '../flow/transaction/MintPhotoShopNFT.js';
 // and mint the NFT based on the information.
 const MyForm = () => {
   const [photo, setPhoto] = useState({});
+  const [transactionStatus, setTransactionStatus] = useState("");
 
   // Helper callback functions to be passed to input elements' onChange.
 
   // Update the state of the pet's name.
   const setName = (event) => {
     const name = event.target.value;
+    setTransactionStatus("");
     setPhoto({...photo, name});
   }
 
   // Update the state of the pet's breed.
   const setDescription = (event) => {
+    setTransactionStatus("");
     const description = event.target.value;
     setPhoto({...photo, description});
   }
@@ -27,17 +30,21 @@ const MyForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await mintPhotoNFT(photo);
+      setTransactionStatus("Please wait...");
+      await mintPhotoNFT(photo );
+      setTransactionStatus("Transaction sealed OK. Your NFT has been minted.");
     } catch (err) {
+      setTransactionStatus("Something went wrong.");
       console.error(err);
     }
   }
 
   return (
     <div style={style}>
+      <h1>Mint NFTs</h1>
       <form onSubmit={handleSubmit}>
         <div className="row">
-            <FileSelector photo={photo} setPet={setPhoto} />
+            <FileSelector photo={photo} setPhoto={setPhoto} />
             <div>
             <label for="nameInput">Photo name</label>
             <input
@@ -61,6 +68,7 @@ const MyForm = () => {
           </div>
         <input className="button-primary" type="submit" value="Mint" />
       </form>
+      {transactionStatus}
     </div>
   );
 };

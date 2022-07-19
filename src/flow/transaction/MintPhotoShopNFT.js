@@ -89,6 +89,8 @@ async function mintPhotoNFT(metadata) {
     let txId = await fcl.decode(encoded);
     console.log(txId);
 
+    fcl.tx(txId).subscribe(res => console.log(res.status));
+
     // This waits for the transaction to be sealed, which is a recommended way.
     await fcl.tx(txId).onceSealed();
 

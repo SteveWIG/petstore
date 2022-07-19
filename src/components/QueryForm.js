@@ -9,6 +9,15 @@ const QueryForm = () => {
     const [metadata, setMetadata] = useState(null);
     const [allTokenIds, setAllTokenIds]  = useState([]);
 
+
+    const style = {
+      padding: '1rem',
+      paddingTop: '5rem',
+      background: 'white',
+      maxWidth: 400,
+      margin: 'auto',
+    };
+
     useEffect(() => {
         let getTokens = async () => {
           // Set mock IDs for now
@@ -39,50 +48,58 @@ const QueryForm = () => {
 
 
     return (
-        <div>
-            <h1>Query NFTs</h1>
-                <form onSubmit={handleSubmit}>
-                    <div className="row">
-                        <div className="">
-                            <label htmlFor="idInput">Photo ID</label>
-                            <select
-                                className="u-full-width"
-                                type="number"
-                                id="idInput"
-                                onChange={(event) => setSelectedId(parseInt(event.target.value))}
-                            >
-                                {
-                                    // We want to display token IDs that are available.
-                                    allTokenIds.map(i => <option value={i} key={i}>{i}</option>)
-                                }
-                            </select>
-                        </div>
+      <div>
+        <div style={style}>
+          <h1>Query NFTs</h1>
+            <form onSubmit={handleSubmit}>
+              <div className="row">
+                <div className="">
+                  <label for="idInput" >Photo ID</label>
+                  <select
+                    className="u-full-width"
+                    type="number"
+                    id="idInput"
+                    onChange={(event) => setSelectedId(parseInt(event.target.value))}
+                    >
+                    {
+                      // We want to display token IDs that are available.
+                      allTokenIds.map(i => <option value={i} key={i}>{i}</option>)
+                    }
+                  </select>
+                </div>
                     </div>
-                    <input className="button-primary" type="submit" value="Query" />
-                </form>
-                {selectedId}
-                {
-                    metadata ? <MetadataTable metadata={metadata} /> : null
-                }
-        </div>
-
+                  <input className="button-primary" type="submit" value="Query" />
+            </form>
+        </div>      
+        {
+          metadata ? <MetadataTable metadata={metadata} /> : null
+        }
+      </div>
     )
 
 
 }
 
+const wider_style = {
+  padding: '1rem',
+  paddingTop: '5rem',
+  background: 'white',
+  maxWidth: 700,
+  margin: 'auto',
+};
+
 const MetadataTable = ({ metadata }) => (
-  <div>
-    <table >
+  
+  
+  <div style={wider_style}>
+    <table width="100%"> 
       <tbody>
-        <tr>
-          {
-            Object.keys(metadata).map((field,i) => (
-              // Skip the `url` attribute in metadata for the table headings.
-              (field === 'url'||field === 'image') ? null : <tr><td key={i} style={{width:"50%"}} >{field}</td><td>{metadata[field]}</td></tr>
-            ))
-          }          
-        </tr>
+        {
+          Object.keys(metadata).map((field,i) => (
+            // Skip the `url` attribute in metadata for the table headings.
+            (field === 'url'||field === 'image') ? null : <tr key={i}><td style={{width:"30%"}} ><b>{field}</b></td><td>{metadata[field]}</td></tr>
+          ))
+        }
       </tbody>      
     </table>
     <div>

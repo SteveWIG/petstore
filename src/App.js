@@ -19,8 +19,12 @@ function App() {
       <h1>User's Address: {user?.addr}</h1>
       <button onClick={()=>fcl.authenticate()}>Connect Wallet</button>
       <button onClick={()=>fcl.unauthenticate()}>Disconnect Wallet</button>
-      {MyForm()}
-      {QueryForm()}
+      <table>
+        <tr>
+          <td class='Vertical-align'>{MyForm()}</td>
+          <td class='Vertical-align'>{QueryForm()}</td>
+        </tr>
+      </table>
     </div>
   );
 }

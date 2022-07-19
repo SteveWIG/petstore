@@ -10,7 +10,7 @@ async function getAllMyPhotoNFTIds(){
     const tokenIds = await fcl.decode(encoded_response);
 
     // Sort the IDs in ascending order and return the array.
-    return tokenIds;
+    return tokenIds.sort((a, b) => a - b);
 }
 
 export default getAllMyPhotoNFTIds;
